@@ -1,0 +1,6 @@
+pointcloud_to_laserscan:
+  ros__parameters:
+    range_max: 10.0
+    use_inf: false
+    target_frame: "base_link"
+    max_height: 10.0
