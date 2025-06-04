@@ -144,6 +144,7 @@ private:
 
   std::deque<sensor_msgs::msg::PointCloud2> pointcloud_buffer_;
   size_t pointcloud_buffer_size_ = 10;
+  nav_msgs::msg::Odometry odom_;
 
   bool odom_published_{false};
 };

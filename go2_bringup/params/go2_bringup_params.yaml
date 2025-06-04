@@ -4,3 +4,6 @@ pointcloud_to_laserscan:
     use_inf: false
     target_frame: "base_link"
     max_height: 10.0
+    angle_min: -2.356194490192345
+    angle_max: 2.356194490192345
+    angle_increment: 0.004363323 # 4 points per degree
