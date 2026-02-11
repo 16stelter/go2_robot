@@ -72,7 +72,20 @@ def generate_launch_description():
             ("cloud_in", "pointcloud"),
             ("scan", "scan"),
         ],
-        parameters=[LaunchConfiguration('params_file')]
+        parameters=[{
+            'target_frame': 'hesai_lidar',
+            'transform_tolerance': 0.01,
+            'min_height': -0.3,
+            'max_height': 3.0,
+            'angle_min': -3.142, #-1.5708,  # -M_PI/2
+            'angle_max': 3.142, #1.5708,  # M_PI/2
+            'angle_increment': 0.003141593, #0.0087,  # M_PI/360.0
+            'scan_time': 0.1, #0.3333,
+            'range_min': 0.1,
+            'range_max': 8.0,
+            'use_inf': False,
+            'inf_epsilon': 1.0
+        }],
     )
 
     ld = LaunchDescription()
