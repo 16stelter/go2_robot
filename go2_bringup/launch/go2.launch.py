@@ -33,6 +33,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch_ros.actions import Node
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PythonExpression
@@ -86,6 +87,13 @@ def generate_launch_description():
         ]
     )
 
+    lidar_relay_cmd = Node(
+        package='hesai_relay',
+        executable='hesai_relay',
+        name='hesai_relay',
+        output='screen',
+    )
+
     #lidar_cmd = IncludeLaunchDescription(
     #    PythonLaunchDescriptionSource([os.path.join(
     #        get_package_share_directory('hesai_ros_driver'),
@@ -113,6 +121,7 @@ def generate_launch_description():
     ld.add_action(declare_realsense_cmd)
     ld.add_action(declare_rviz_cmd)
     ld.add_action(robot_description_cmd)
+    ld.add_action(lidar_relay_cmd)
     #ld.add_action(lidar_cmd)
     #ld.add_action(realsense_cmd)
     ld.add_action(driver_cmd)
