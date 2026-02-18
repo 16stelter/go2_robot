@@ -1,5 +1,25 @@
 # Unitree GO2 Robot ROS 2
 
+This is a modified version of the go2_robot repository by Unitree, which can be found here: https://github.com/Unitree-Go2-Robot/go2_robot/tree/foxy-devel
+The repository also includes a modified version of the Hesai to Ros2 node by HesaiTechnology, which can be found here: https://github.com/HesaiTechnology/HesaiLidar_ROS_2.0
+The repository further includes the pointcloud_to_laserscan, which can be found here: https://github.com/ros-perception/pointcloud_to_laserscan
+
+## Modifications
+
+The following modifications were made to the original repositories:
+
+* Replaces Broken Lidar Nodes with Hesai Lidar
+* Adds relay node for pointclouds
+* Uses system time instead of sensor time
+* Fixes lidar frames in URDF
+* Fixes IMU publisher
+* Fixes Odometry publisher
+* Adds Pointcloud to Laserscan node
+
+## Original ReadMe
+
+The original readme of this repository is preserved below. The original readme of the Hesai to Ros2 repository is preserved inside of its folder.
+
 <p align="center">
 <img width="1280" height="420" src="https://github.com/IntelligentRoboticsLabs/go2_robot/assets/44479765/da616d77-cf4d-4acf-af2f-adc99f4f72d7)" alt='Go2 point cloud'>
 </p>
