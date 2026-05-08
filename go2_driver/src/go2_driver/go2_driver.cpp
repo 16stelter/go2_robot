@@ -41,14 +41,14 @@ Go2Driver::Go2Driver(
   rclcpp::QoS qos_profile(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_default));
   qos_profile.durability(RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL);
 
-  pointcloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>("pointcloud", 10);
+  pointcloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>("/utlidar/pointcloud", 10);
   joint_state_pub_ = create_publisher<sensor_msgs::msg::JointState>("joint_states", 10);
   odom_pub_ = create_publisher<nav_msgs::msg::Odometry>("odom", qos_profile);
   imu_pub_ = create_publisher<sensor_msgs::msg::Imu>("imu", 10);
   request_pub_ = create_publisher<unitree_api::msg::Request>("api/sport/request", 10);
 
   pointcloud_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
-    "/lidar_points",
+    "/utlidar/cloud_deskewed",
     rclcpp::QoS(rclcpp::KeepLast(10)).best_effort(),
     std::bind(&Go2Driver::publish_lidar, this, std::placeholders::_1));
 
@@ -134,11 +134,9 @@ void Go2Driver::publish_lidar(const sensor_msgs::msg::PointCloud2::SharedPtr msg
 {
   /* sensor_msgs::msg::PointCloud2 out_msg = *msg;
   out_msg.header.stamp = now();
-  out_msg.header.frame_id = "radar";
   pointcloud_buffer_.push_back(out_msg);
   if(pointcloud_buffer_.size() >= pointcloud_buffer_size_) {
     
-
     sensor_msgs::msg::PointCloud2 combined_cloud;
     combined_cloud.header = out_msg.header;
     combined_cloud.height = 1;
@@ -164,9 +162,9 @@ void Go2Driver::publish_lidar(const sensor_msgs::msg::PointCloud2::SharedPtr msg
 
     pointcloud_pub_->publish(combined_cloud);
     pointcloud_buffer_.clear();
-  } */
+  }*/
   msg->header.stamp = now();
-  msg->header.frame_id = "hesai_lidar"; //radar
+  msg->header.frame_id = "odom"; //radar
   pointcloud_pub_->publish(*msg);
 }
 

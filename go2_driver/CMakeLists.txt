@@ -16,6 +16,7 @@ find_package(unitree_go REQUIRED)
 find_package(unitree_api REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(go2_interfaces REQUIRED)
+find_package(pointcloud_to_laserscan REQUIRED)
 
 set(dependencies
   rclcpp
@@ -28,6 +29,7 @@ set(dependencies
   unitree_api
   tf2_ros
   go2_interfaces
+  pointcloud_to_laserscan
 )
 
 include_directories(include)
