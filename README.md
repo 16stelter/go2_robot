@@ -1,238 +1,338 @@
-# Unitree GO2 Robot ROS 2
+![Ros2 SDK](https://github.com/abizovnuralem/go2_ros2_sdk/assets/33475993/49edebbe-11b6-49c6-b82d-bc46257674bd)
 
-This is a modified version of the go2_robot repository by Unitree, which can be found here: https://github.com/Unitree-Go2-Robot/go2_robot/tree/foxy-devel
-The repository also includes a modified version of the Hesai to Ros2 node by HesaiTechnology, which can be found here: https://github.com/HesaiTechnology/HesaiLidar_ROS_2.0
-The repository further includes the pointcloud_to_laserscan, which can be found here: https://github.com/ros-perception/pointcloud_to_laserscan
+# Welcome to the Unitree Go2 ROS2 SDK Project!
 
-## Modifications
+> [!IMPORTANT]  
+> I hadn’t updated this repository in a long time, and a lot of changes accumulated, making the project somewhat messy. I’ve finally found time to refactor everything using Clean Architecture principles. Previously, the LiDAR stream ran at around 2 Hz; it now updates at 7 Hz. However, joint states still arrive at 1 Hz, so you may notice some URDF update lag—that’s expected with the new firmware (v1.1.7). We’ll need to find a workaround for that.
 
-The following modifications were made to the original repositories:
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-4.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
+[![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/22.04/)
+[![Windows platform](https://img.shields.io/badge/platform-windows--64-orange.svg)](https://www.microsoft.com/en-us/)
+![ROS2 Build](https://github.com/abizovnuralem/go2_ros2_sdk/actions/workflows/ros_build.yaml/badge.svg)
+[![License](https://img.shields.io/badge/license-BSD--2-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
-* Replaces Broken Lidar Nodes with Hesai Lidar
-* Adds relay node for pointclouds
-* Uses system time instead of sensor time
-* Fixes lidar frames in URDF
-* Fixes IMU publisher
-* Fixes Odometry publisher
-* Adds Pointcloud to Laserscan node
 
-## Original ReadMe
+We are happy to present you our integration of the Unitree Go2 with ROS2 over Wi-Fi, that was designed by the talented [@tfoldi](https://github.com/tfoldi). You can explore his groundbreaking work at [go2-webrtc](https://github.com/tfoldi/go2-webrtc).
 
-The original readme of this repository is preserved below. The original readme of the Hesai to Ros2 repository is preserved inside of its folder.
+This repo will empower your Unitree GO2 AIR/PRO/EDU robots with ROS2 capabilities, using both WebRTC (Wi-Fi) and CycloneDDS (Ethernet) protocols.
+
+If you are using WebRTC (Wi-Fi) protocol, close the connection with a mobile app before connecting to the robot.
+
+
+## Project RoadMap:
+
+1. URDF :white_check_mark: 
+2. Joint states sync in real time :white_check_mark: 
+3. IMU sync in real time :white_check_mark: 
+4. Joystick control in real time :white_check_mark: 
+6. Go2 topics info in real time :white_check_mark: 
+7. Foot force sensors info in real time :white_check_mark: 
+8. Lidar stream (added pointCloud2) :white_check_mark: 
+9. Camera stream :white_check_mark:
+10. Foxglove bridge :white_check_mark:
+11. Laser Scan :white_check_mark:
+12. Multi robot support :white_check_mark:
+13. WebRTC and CycloneDDS support :white_check_mark:
+14. Creating a PointCloud map and store it :white_check_mark:
+15. SLAM (slam_toolbox) :white_check_mark:
+16. Navigation (nav2) :white_check_mark:
+17. Object detection (coco) :white_check_mark:
+18. AutoPilot
+
+## Your feedback and support mean the world to us. 
+
+If you're as enthusiastic about this project as we are, please consider giving it a :star: star!!!
+
+Your encouragement fuels our passion and helps us develop our RoadMap further. We welcome any help or suggestions you can offer!
+
+Together, let's push the boundaries of what's possible with the Unitree Go2 and ROS2!
+
+## Exciting Features:
+
+:sparkles: Full ROS2 SDK support for your Unitree GO2
+
+:robot: Compatible with AIR, PRO, and EDU variants
+
+:footprints: Access to foot force sensors feedback (available on some GO2 PRO models or EDU)
+
+
+## Real time Go2 Air/PRO/EDU joints sync:
 
 <p align="center">
-<img width="1280" height="420" src="https://github.com/IntelligentRoboticsLabs/go2_robot/assets/44479765/da616d77-cf4d-4acf-af2f-adc99f4f72d7)" alt='Go2 point cloud'>
+<img width="1280" height="640" src="https://github.com/abizovnuralem/go2_ros2_sdk/assets/33475993/bf3f5a83-f02b-4c78-a7a1-b379ce057492" alt='Go2 joints sync'>
 </p>
 
-[![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
-![distro](https://img.shields.io/badge/Ubuntu%2022-Jammy%20Jellyfish-green)
-![distro](https://img.shields.io/badge/ROS2-Humble-blue)
-[![humble](https://github.com/IntelligentRoboticsLabs/go2_robot/actions/workflows/humble.yaml/badge.svg)](https://github.com/IntelligentRoboticsLabs/go2_robot/actions/workflows/humble.yaml)
-[![humble-devel](https://github.com/IntelligentRoboticsLabs/go2_robot/actions/workflows/humble_devel.yaml/badge.svg)](https://github.com/IntelligentRoboticsLabs/go2_robot/actions/workflows/humble_devel.yaml)
+## Go2 Air/PRO/EDU lidar point cloud:
 
-In this package is our integration for the Unitee Go2 robot.
+<p align="center">
+<img width="1280" height="640" src="https://github.com/abizovnuralem/go2_ros2_sdk/assets/33475993/9c1c3826-f875-4da1-a650-747044e748e1" alt='Go2 point cloud'>
+</p>
 
-## Checklist
 
-- [x] robot description
-- [x] odom
-- [x] pointcloud
-- [x] joint_states
-- [x] Visualization in rviz
-- [x] cmd_vel
-- [x] go2_interfaces
-- [x] Change modes
-- [x] Change configuration for robot
-- [ ] SLAM (working in progress)
-- [ ] Nav2 (working in progress)
-- [ ] Ros2cli
-- [ ] Hardware interface
-- [ ] Gazebo simulation
+## System requirements
+
+Tested systems and ROS2 distro
+|systems|ROS2 distro|Build status
+|--|--|--|
+|Ubuntu 22.04|iron|![ROS2 CI](https://github.com/abizovnuralem/go2_ros2_sdk/actions/workflows/ros_build.yaml/badge.svg)
+|Ubuntu 22.04|humble|![ROS2 CI](https://github.com/abizovnuralem/go2_ros2_sdk/actions/workflows/ros_build.yaml/badge.svg)
+|Ubuntu 22.04|rolling|![ROS2 CI](https://github.com/abizovnuralem/go2_ros2_sdk/actions/workflows/ros_build.yaml/badge.svg)
 
 ## Installation
-You need to have previously installed ROS2. Please follow this [guide](https://docs.ros.org/en/humble/Installation.html) if you don't have it.
 
-```bash
-source /opt/ros/humble/setup.bash
-```
+```shell
+mkdir -p ros2_ws
+cd ros2_ws
+git clone --recurse-submodules https://github.com/abizovnuralem/go2_ros2_sdk.git src
+sudo apt install ros-$ROS_DISTRO-image-tools
+sudo apt install ros-$ROS_DISTRO-vision-msgs
 
-Create workspace and clone the repository
-
-```bash
-mkdir ~/go2_ws/src
-cd ~/go2_ws/src
-git clone https://github.com/IntelligentRoboticsLabs/go2_robot.git -b humble
-```
-
-Install dependencies and build workspace
-```bash
-cd ~/go2_ws
-sudo rosdep init
-rosdep update
-rosdep install --from-paths src --ignore-src -r -y
-colcon build --symlink-install 
-```
-
-Setup the workspace
-```bash
-source ~/ros2_ws/install/setup.bash
-```
-
-## Sensor installation
-If you have purchased a hesai lidar 3d, or a realsense d435i, follow the following steps inside the robot.
-
-### Hesai Lidar
-
-```bash
-sudo apt-get install libboost-all-dev
-sudo apt-get install -y libyaml-cpp-dev
-git clone --recurse-submodules https://github.com/HesaiTechnology/HesaiLidar_ROS_2.0.git
+sudo apt install python3-pip clang portaudio19-dev
+cd src
+pip install -r requirements.txt
 cd ..
+```
+Pay attention to any error messages. If `pip install` does not complete cleanly, various features will not work. For example, `open3d` does not yet support `python3.12` and therefore you will need to set up a 3.11 `venv` first etc.
+
+Build `go2_ros_sdk`. You need to have `ros2` and `rosdep` installed. If you do not, follow these [instructions](https://docs.ros.org/en/humble/Installation.html). Then:
+```shell
 source /opt/ros/$ROS_DISTRO/setup.bash
 rosdep install --from-paths src --ignore-src -r -y
-colcon build --symlink-install
-source install/setup.bash
+colcon build
 ```
 
-Set the lidar IP to `config/config.yaml`
-```yaml
-lidar:
-- driver:
-    udp_port: 2368                                       #UDP port of lidar
-    ptc_port: 9347                                       #PTC port of lidar
-    device_ip_address: <Device IP>                       #IP address of lidar
-    pcap_path: "<Your PCAP file path>"                   #The path of pcap file (set during offline playback)
-    correction_file_path: "<Your correction file path>"  #LiDAR angle file, required for offline playback of pcap/packet rosbag
-    firetimes_path: "<Your firetime file path>"          #The path of firetimes file
-    source_type: 2                                       #The type of data source, 1: real-time lidar connection, 2: pcap, 3: packet rosbag
-    pcap_play_synchronization: true                      #Pcap play rate synchronize with the host time
-    x: 0                                                 #Calibration parameter
-    y: 0                                                 #Calibration parameter
-    z: 0                                                 #Calibration parameter
-    roll: 0                                              #Calibration parameter
-    pitch: 0                                             #Calibration parameter
-    yaw: 0                                               #Calibration parameter
-ros:
-    ros_frame_id: hesai_lidar                            #Frame id of packet message and point cloud message
-    ros_recv_packet_topic: /lidar_packets                #Topic used to receive lidar packets from ROS
-    ros_send_packet_topic: /lidar_packets                #Topic used to send lidar packets through ROS
-    ros_send_point_cloud_topic: /lidar_points            #Topic used to send point cloud through ROS
-    send_packet_ros: true                                #true: Send packets through ROS 
-    send_point_cloud_ros: true                           #true: Send point cloud through ROS 
-```
+## Running via Docker
+Can set environment variables beforehand, hardcoded in docker/docker-compose.yaml, or as shown below. 
 
-### Realsense d435i
-
-```bash
-sudo apt install ros-humble-realsense2-camera
+Run:
+```shell
+cd docker
+ROBOT_IP=<ROBOT_IP> CONN_TYPE=<webrtc/cyclonedds> docker-compose up --build
 ```
 
 ## Usage
-### Bringup the robot
-Either from your computer, or from inside the robot, execute the following:
+
+Don't forget to set up your Go2 robot in Wifi-mode and obtain the IP. You can use the mobile app to get it. Go to Device -> Data -> Automatic Machine Inspection and look for STA Network: wlan0.
+
+```shell
+source install/setup.bash
+export ROBOT_IP="robot_ip" #for muliple robots, just split by ,
+export CONN_TYPE="webrtc"
+ros2 launch go2_robot_sdk robot.launch.py
+```
+
+The `robot.launch.py` code starts many services/nodes simultaneously, including 
+
+* robot_state_publisher
+* ros2_go2_video (front color camera)
+* pointcloud_to_laserscan_node
+* go2_robot_sdk/go2_driver_node
+* lidar_processor/lidar_to_pointcloud
+* rviz2
+* `joy` (ROS2 Driver for Generic Joysticks and Game Controllers)
+* `teleop_twist_joy` (facility for tele-operating Twist-based ROS2 robots with a standard joystick. Converts joy messages to velocity commands)       
+* `twist_mux` (twist_multiplexer with source prioritization)        
+* foxglove_launch (launches the foxglove bridge)
+* slam_toolbox/online_async_launch.py
+* av2_bringup/navigation_launch.py
+
+When you run `robot.launch.py`, `rviz` will fire up, lidar data will begin to accumulate, the front color camera data will be displayed too (typically after 4 seconds), and your dog will be waiting for commands from your joystick (e.g. a X-box controller). You can then steer the dog through your house, e.g., and collect LIDAR mapping data. 
+
+### SLAM and Nav2
+
+![Simplified Rviz Display](https://github.com/user-attachments/assets/74a7c07c-2c2d-4022-9a23-94407f2c2a06)
+
+The goal of SLAM overall, and the `slam_toolbox` in particular, is to create a map. The `slam_toolbox` is a grid mapper - it thinks about the world in terms of a fixed grid that the dog operates in. When the dog initially moves through a new space, data accumulate and the developing map is and published it to the `/map` topic. The goal of `Nav2` is to navigate and perform other tasks in this map.
+
+The `rviz` settings that are used upon initial launch (triggered by `ros2 launch go2_robot_sdk robot.launch.py`) showcase various datastreams.  
+
+* `RobotModel` is the dimensionally correct model of the G02 
+* `PointCloud2` are the raw LIDAR data transformed into 3D objects/constraints 
+* `LaserScan` are lower level scan data before translation into an x,y,z frame
+* `Image` are the data from the front-facing color camera 
+* `Map` is the map being created by the `slam_toolbox`
+* `Odometry` is the history of directions/movements of the dog
+
+If there is too much going on in the initial screen, deselect the `map` topic to allow you to see more.
+
+
+### Mapping - creating your first map
+
+Use painter's tape to mark a 'dock' rectangle (or use a real dock) to create a defined starting point for your dog on your floor. In the `rviz` `SlamToolboxPlugin`, on the left side of the your `rviz` screen, select "Start At Dock". Then, use your controller to manually explore a space, such as a series of rooms. You will see the map data accumulating in `rviz`. In this map, white, black and grey pixels represent the free, occupied, and unknown space, respectively. When you are done mapping, enter a file name into the "Save Map" field and click "Save Map". Then enter a file name into "Serialize Map" field and click "Serialize Map". Now, you should have 2 new files in `/ros2_ws`:
+
+```shell
+map_1.yaml: the metadata for the map as well as the path to the .pgm image file.
+map_1.pgm: the image file with white, black and grey pixels representing the free, occupied, and unknown space.
+map_1.data: 
+map_1.posegraph: 
+```
+
+The next time you start the system, the map can be loaded and is ready for you to complete/extend by mapping more spaces. Upon restart and loading a map, the dog does not know where it is relative to the map you created earlier. Assuming you rebooted the dog in its marked rectangle, or in an actual dock, it will have a high quality initial position and angle.  
+
+### Autonomous Navigation - navigating in your new map
+
+As shown in the `rviz` `Navigation 2` plugin, the system will come up in:
+
+```shell
+Navigation: active
+Localization: inactive
+Feedback: unknown
+```
+
+Then, load your map via the `SlamToolboxPlugin` (enter your map's filename (without any extension) in the 'Deserialize Map' field and then click 'Deserialize Map'). 
+
+**WARNING**: please make sure that (1) the dog is correctly oriented WRT to the map and (2) the map itself is sane and corresponds to your house. Especially if you have long corridors, the overall map can be distorted relative to reality, and this means that the route planner will try to route your dog through walls, leaving long scratches in your walls. 
+
+You can now give the dog its first target, via 'Nav2 Goal' in the `rviz` menu. Use the mouse cursor to provide a target to navigate to.
+
+**NOTE**: the `Nav2 Goal` cursor sets both the target position and the final angle of the dog, that you wish the dog to adopt upon reaching the target (need to double check). The long green arrow that is revealed when you click an point and keep moving your mouse cursor is the angle setter. 
+
+Until you have some experience, we suggest following your dog and picking it up when it is about to do something silly.
+
+**NOTE**: Virtually all fault behaviors - spinning in circles, running into walls, trying to walk through walls, etc reflect (1) a map that is incorrect, (2) incorrect initial position/angle of the dog relative to that map, or (3) inability to compute solutions/paths based on overloaded control loops. To prevent #3, which results in no motion or continuous spinning, the key loop rates (`controller_frequency`: 3.0 and `expected_planner_frequency`: 1.0 have been set to very conservative rates). 
+
+## Real time image detection and tracking
+
+This capability is directly based on [J. Francis's work](https://github.com/jfrancis71/ros2_coco_detector). Launch the `go2_ro2_sdk`. After a few seconds, the color image data will be available at `go2_camera/color/image`. On another terminal enter:
+
 ```bash
-ros2 launch go2_bringup go2.launch.py
+source install/setup.bash
+ros2 run coco_detector coco_detector_node
 ```
-> If you have a realsense and a lidar inside the robot, use the lidar or realsense parameters.
-> It will only work if you throw everything inside the robot
 
-If you want to see your robot through rviz, do it as follows:
+There will be a short delay the first time the node is run for PyTorch TorchVision to download the neural network. You should see a download progress bar. TorchVision cached for subsequent runs.
+
+On another terminal, to view the detection messages:
+```shell
+source install/setup.bash
+ros2 topic echo /detected_objects
+```
+The detection messages contain the detected object (`class_id`) and the `score`, a number from 0 to 1. For example: `detections:results:hypothesis:class_id: giraffe` and `detections:results:hypothesis:score: 0.9989`. The `bbox:center:x` and `bbox:center:y` contain the centroid of the object in pixels. These data can be used to implement real-time object following for animals and people. People are detected as `detections:results:hypothesis:class_id: person`.
+
+To view the image stream annotated with the labels and bounding boxes:
+```shell
+source install/setup.bash
+ros2 run image_tools showimage --ros-args -r /image:=/annotated_image
+```
+
+Example Use:
+```shell
+ros2 run coco_detector coco_detector_node --ros-args -p publish_annotated_image:=False -p device:=cuda -p detection_threshold:=0.7
+```
+
+This will run the coco detector without publishing the annotated image (it is True by default) using the default CUDA device (device=cpu by default). It sets the detection_threshold to 0.7 (it is 0.9 by default). The detection_threshold should be between 0.0 and 1.0; the higher this number the more detections will be rejected. If you have too many false detections try increasing this number. Thus only Detection2DArray messages are published on topic /detected_objects.
+
+## 3D raw pointcloud dump
+
+To save raw LIDAR data, `export` the following:
+
+```shell
+export MAP_SAVE=True
+export MAP_NAME="3d_map"
+```
+
+Every 10 seconds, pointcloud data (in `.ply` format) will be saved to the root folder of the repo. **NOTE**: This is _not_ a Nav2 map but a raw data dump of LIDAR data useful for low-level debugging. 
+
+## Multi robot support 
+If you want to connect several robots for collaboration:
+
+```shell
+export ROBOT_IP="robot_ip_1, robot_ip_2, robot_ip_N"
+```
+
+## Switching between webrtc connection (Wi-Fi) to CycloneDDS (Ethernet)
+
+```shell
+export CONN_TYPE="webrtc"
+```
+or
+```
+export CONN_TYPE="cyclonedds"
+```
+
+## Foxglove
+
+<p align="center">
+<img width="1200" height="630" src="https://github.com/abizovnuralem/go2_ros2_sdk/assets/33475993/f0920d6c-5b7a-4718-b781-8cfa03a88095" alt='Foxglove bridge'>
+</p>
+
+To use Foxglove, you need to install Foxglove Studio:
+```
+sudo snap install foxglove-studio
+```
+
+1. Open Foxglove Studio and press "Open Connection".
+2. In the "Open Connection" settings, choose "Foxglove WebSocket" and use the default configuration ws://localhost:8765, then press "Open".
+
+## WebRTC Topic Interface
+
+The SDK provides a WebRTC topic interface that allows sending various commands to the robot. This is particularly useful for non-movement actions such as turning on headlights, playing sounds, and other robot control functions.
+
+To send commands via the WebRTC topic:
+
 ```bash
-ros2 launch go2_bringup go2.launch.py rviz:=True
+# Basic command structure
+ros2 topic pub /webrtc_req go2_interfaces/msg/WebRtcReq "{api_id: <API_ID>, parameter: '<PARAMETER>', topic: '<TOPIC>', priority: <0|1>}" --once
+
+# Example: Send a handshake command
+ros2 topic pub /webrtc_req go2_interfaces/msg/WebRtcReq "{api_id: 1016, topic: 'rt/api/sport/request'}" --once
 ```
 
-### Change modes
-If what you want is for your robot to be able to change modes, thus performing the movements predefined by the controller, use the following service:
-```bash
-ros2 service call /mode go2_interfaces/srv/Mode "mode: 'hello'"
-```
+## WSL 2
 
-<details>
-<summary>Available modes</summary>
-```
-damp
-balance_stand
-stop_move
-stand_up
-stand_down
-sit
-rise_sit
-hello
-stretch
-wallow
-scrape
-front_flip
-front_jump
-front_pounce
-dance1
-dance2
-finger_heart
-```
-</details>
+If you are running ROS2 under WSL2 - you may need to configure Joystick\Gamepad to navigate the robot.
 
-### Change configurations for robot
-If you want, you can modify the ways the robot walks, the height of the base, the height of the legs when walking... I show you the different parameters that can be modified:
+1. Step 1 - share device with WSL2
 
-- BodyHeight: Set the relative height of the body above the ground when standing and walking. [0.3 ~ 0.5]
-  ```bash
-  ros2 service call /body_height go2_interfaces/srv/BodyHeight  "height: 0.0"
-  ```
-- ContinuousGait: Continuous movement
-  ```bash
-  ros2 service call /continuous_gait go2_interfaces/srv/ContinuousGait  "flag: false"
-  ```
-- Euler: Posture when standing and walking. [-0.75 ~ 0.75] [-0.75 ~ 0.75] [-1.5 ~ 1.5]
-  ```bash
-  ros2 service call /euler go2_interfaces/srv/Euler "roll: 0.0 pitch: 0.0 yaw: 0.0"
-  ```
-- FootRaiseHeight: Set the relative height of foot lift during movement [-0.06 ~ 0.03]
-  ```bash
-  ros2 service call /foot_raise_height go2_interfaces/srv/FootRaiseHeight "height: 0.0"
-  ```
-- Pose: Set true to pose and false to restore
-  ```bash
-  ros2 service call /pose go2_interfaces/srv/Pose "flag: false"
-  ```
-- SpeedLevel: Set the speed range [-1 ~ 1]
-  ```bash
-  ros2 service call /speed_level go2_interfaces/srv/SpeedLevel "level: 0"
-  ```
-- SwitchGait: Switch gait [0 - 4]
-  ```bash
-  ros2 service call /switch_gait go2_interfaces/srv/SwitchGait  "d: 0"
-  ```
-- SwitchJoystick: Native remote control response switch
-  ```bash
-  ros2 service call /switch_joystick go2_interfaces/srv/SwitchJoystick "flag: false"
-  ```
+    Follow steps here https://learn.microsoft.com/en-us/windows/wsl/connect-usb to share your console device with WSL2
 
-## SLAM
-In the future, work in progress.
+2. Step 2 - Enable WSL2 joystick drivers
 
-## NAVIGATION
-In the future, work in progress.
+    WSL2 does not come by default with the modules for joysticks. Build WSL2 Kernel with the joystick drivers. Follow the instructions here: https://github.com/dorssel/usbipd-win/wiki/WSL-support#building-your-own-wsl-2-kernel-with-additional-drivers  If you're comfortable with WSl2, skip the export steps and start at `Install prerequisites.`
 
-## Demos
-### Robot description
+    Before buiding, edit `.config` file and update the CONFIG_ values listed in this GitHub issue: https://github.com/microsoft/WSL/issues/7747#issuecomment-1328217406
 
-[go2_tf.webm](https://github.com/IntelligentRoboticsLabs/go2_robot/assets/44479765/b019e6fc-875f-4870-a510-afa6e1353e08)
+2. Step 3 - Give permissions to /dev/input devices
 
-### Robot PointCloud
+    Once you've finished the guides under Step 3 - you should be able to see your joystick device under /dev/input
 
-https://github.com/IntelligentRoboticsLabs/go2_robot/assets/44479765/c164840a-6857-4d95-a50e-023c5bb44edb
+    ```bash
+    ls /dev/input
+    by-id  by-path  event0  js0
+    ```
 
-## Acknowledgment
-Thanks to [unitree](https://github.com/unitreerobotics/unitree_ros2) for providing the support and communication interfaces with the robot.
+    By default /dev/input/event* will only have root permissions, so joy node won't have access to the joystick
 
-## About
-This is a project made by the [Intelligent Robotics Lab](https://intelligentroboticslab.gsyc.urjc.es/), a research group from the [Universidad Rey Juan Carlos](https://www.urjc.es/).
-Copyright &copy; 2024.
+    Create a file `/etc/udev/rules.d/99-userdev-input.rules` with the following content:
+    `KERNEL=="event*", SUBSYSTEM=="input", RUN+="/usr/bin/setfacl -m u:YOURUSERNAME:rw $env{DEVNAME}"`
 
-Maintainers:
+    Run as root: `udevadm control --reload-rules && udevadm trigger`
 
-* [Juan Carlos Manzanares Serrano](https://github.com/Juancams)
-* [Juan S. Cely](https://github.com/juanscelyg)
+    https://askubuntu.com/a/609678
+
+3. Step 3 - verify that joy node is able to see the device properly. 
+
+    Run `ros2 run joy joy_enumerate_devices`
+
+    ```
+    ID : GUID                             : GamePad : Mapped : Joystick Device Name
+    -------------------------------------------------------------------------------
+    0 : 030000005e040000120b000007050000 :    true :  false : Xbox Series X Controller
+    ```
+
+## Thanks
+
+Special thanks to:
+1. @tfoldi (Tamas) for his idea and talent to create a webrtc connection method between python and unitree GO2;
+2. @budavariam for helping with lidar issues;
+3. @legion1581 for a new webrtc method, that is working with 1.1.1 firmware update;
+4. @alex.lin for his passion in ros1 ingration;
+5. @alansrobotlab for his passion in robotics and helping me to debug new webrtc method;
+6. @giangalv (Gianluca Galvagn) for helping me debug new issues with webrtc;
+7. Many many other open source contributors! and TheRoboVerse community!
+
 
 ## License
 
-This project is licensed under the BSD 3-clause License - see the [LICENSE](https://github.com/IntelligentRoboticsLabs/go2_robot/blob/humble/LICENSE) file for details.
+This project is licensed under the BSD 2-clause License - see the [LICENSE](https://github.com/abizovnuralem/go2_ros2_sdk/blob/master/LICENSE) file for details.

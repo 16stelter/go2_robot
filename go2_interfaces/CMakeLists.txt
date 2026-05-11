@@ -9,6 +9,7 @@ endif()
 find_package(rosidl_default_generators REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/BodyHeight.srv"
@@ -20,7 +21,43 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SpeedLevel.srv"
   "srv/SwitchGait.srv"
   "srv/SwitchJoystick.srv"
-  DEPENDENCIES
+
+    # Original go2_interfaces messages
+  "msg/Go2Cmd.msg"
+  "msg/Go2State.msg"
+  "msg/Go2Move.msg"
+  "msg/Go2RpyCmd.msg"
+  "msg/IMU.msg"
+  
+  # Merged from unitree_go
+  "msg/AudioData.msg"
+  "msg/BmsCmd.msg"
+  "msg/BmsState.msg"
+  "msg/Error.msg"
+  "msg/Go2FrontVideoData.msg"
+  "msg/HeightMap.msg"
+  "msg/InterfaceConfig.msg"
+  "msg/LidarState.msg"
+  "msg/LowCmd.msg"
+  "msg/LowState.msg"
+  "msg/MotorCmd.msg"
+  "msg/MotorCmds.msg"
+  "msg/MotorState.msg"
+  "msg/MotorStates.msg"
+  "msg/PathPoint.msg"
+  "msg/Req.msg"
+  "msg/Res.msg"
+  "msg/SportModeCmd.msg"
+  "msg/SportModeState.msg"
+  "msg/TimeSpec.msg"
+  "msg/UwbState.msg"
+  "msg/UwbSwitch.msg"
+  "msg/VoxelMapCompressed.msg"
+  "msg/VoxelHeightMapState.msg"
+  "msg/WebRtcReq.msg"
+  "msg/WirelessController.msg"
+
+  DEPENDENCIES geometry_msgs
 )
 
 if(BUILD_TESTING)
