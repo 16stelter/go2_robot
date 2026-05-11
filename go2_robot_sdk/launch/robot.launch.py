@@ -10,7 +10,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import FrontendLaunchDescriptionSource, PythonLaunchDescriptionSource
-
+import xacro
 
 class Go2LaunchConfig:
     """Configuration container for Go2 robot launch parameters"""
@@ -31,6 +31,7 @@ class Go2LaunchConfig:
         
         # Package paths
         self.package_dir = get_package_share_directory('go2_robot_sdk')
+        self.description_package_dir = get_package_share_directory('go2_description')
         self.config_paths = self._get_config_paths()
         
         print(f"Go2 Launch Configuration:")
@@ -57,7 +58,7 @@ class Go2LaunchConfig:
     
     def _get_urdf_file(self) -> str:
         """Get appropriate URDF file"""
-        return 'go2.urdf' if self.conn_mode == 'single' else 'multi_go2.urdf'
+        return 'unitree_go2_robot.xacro'
     
     def _get_config_paths(self) -> dict:
         """Get all configuration file paths"""
@@ -65,7 +66,7 @@ class Go2LaunchConfig:
             'joystick': os.path.join(self.package_dir, 'config', 'joystick.yaml'),
             'twist_mux': os.path.join(self.package_dir, 'config', 'twist_mux.yaml'),
             'rviz': os.path.join(self.package_dir, 'config', self.rviz_config),
-            'urdf': os.path.join(self.package_dir, 'urdf', self.urdf_file),
+            'urdf': os.path.join(self.description_package_dir, 'urdf', self.urdf_file),
         }
 
 
@@ -132,8 +133,11 @@ class Go2NodeFactory:
     
     def _load_urdf_content(self, urdf_path: str) -> str:
         """Load URDF file content"""
-        with open(urdf_path, 'r') as file:
-            return file.read()
+        robot_desc = xacro.process(
+            urdf_path,
+            mappings={"robot_ns": ""},
+        )
+        return robot_desc
 
     def create_core_nodes(self) -> List[Node]:
         """Create core Go2 robot nodes"""

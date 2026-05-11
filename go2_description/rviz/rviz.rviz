@@ -81,42 +81,42 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        lf_foot_link:
+        FL_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lf_hip_link:
+        FL_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lf_lower_leg_link:
+        FL_calf:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lf_upper_leg_link:
+        FL_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lh_foot_link:
+        RL_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lh_hip_link:
+        RL_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lh_lower_leg_link:
+        RL_calf:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        lh_upper_leg_link:
+        RL_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -126,42 +126,42 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        rf_foot_link:
+        FR_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rf_hip_link:
+        FR_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rf_lower_leg_link:
+        FR_calf:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rf_upper_leg_link:
+        FR_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rh_foot_link:
+        RR_foot:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rh_hip_link:
+        RR_hip:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rh_lower_leg_link:
+        RR_calf:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rh_upper_leg_link:
+        RR_thigh:
           Alpha: 1
           Show Axes: false
           Show Trail: false

@@ -9,6 +9,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction, GroupAction
 from launch.substitutions import LaunchConfiguration, Command, EnvironmentVariable, PythonExpression
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import IfCondition
+import xacro
 
 
 def load_urdf(context, *args, **kwargs):
@@ -16,10 +17,15 @@ def load_urdf(context, *args, **kwargs):
     urdf_file_name = context.launch_configurations['urdf_file_name']
 
     # Get package directory
-    pkg_dir = get_package_share_directory('go2_robot_sdk')
+    pkg_dir = get_package_share_directory('go2_description')
 
     # Create full path to URDF
     urdf_file_path = os.path.join(pkg_dir, 'urdf', urdf_file_name)
+
+    robot_desc = xacro.process(
+        urdf_file_path,
+        mappings={"robot_ns": ""},
+    )
 
     # Robot state publisher node
     robot_state_publisher_node = Node(
@@ -27,12 +33,10 @@ def load_urdf(context, *args, **kwargs):
         executable='robot_state_publisher',
         name='webrtc_robot_state_publisher',
         output='screen',
-        parameters=[{
-            'robot_description': ParameterValue(
-                Command(['cat ', urdf_file_path]),
-                value_type=str
-            )
-        }],
+        parameters=[
+            {"use_sim_time": True},
+            {"robot_description": robot_desc},
+        ],
         on_exit=LaunchConfiguration('on_exit'),
     )
 
@@ -44,7 +48,7 @@ def generate_launch_description():
     robot_ip = LaunchConfiguration('robot_ip', default=os.getenv(
         'ROBOT_IP', os.getenv('GO2_IP', '')))
     enable_video = LaunchConfiguration('enable_video', default='true')
-    urdf_file_name = LaunchConfiguration('urdf_file_name', default='go2.urdf')
+    urdf_file_name = LaunchConfiguration('urdf_file_name', default='unitree_go2_robot.xacro')
     send_buffer_limit = LaunchConfiguration('send_buffer_limit', default='100000000')
     on_exit = LaunchConfiguration('on_exit', default='shutdown')
     elevenlabs_api_key = LaunchConfiguration(
@@ -66,7 +70,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'urdf_file_name',
-            default_value='go2.urdf',
+            default_value='unitree_go2_robot.xacro',
             description='Name of the URDF file'
         ),
         DeclareLaunchArgument(
