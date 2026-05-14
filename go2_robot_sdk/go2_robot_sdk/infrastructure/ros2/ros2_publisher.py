@@ -55,10 +55,10 @@ class ROS2Publisher(IRobotDataPublisher):
         """Publish TF transform"""
         odom_trans = TransformStamped()
         odom_trans.header.stamp = self.node.get_clock().now().to_msg()
-        odom_trans.header.frame_id = 'odom'
+        odom_trans.header.frame_id = f'{self.config.prefix}odom'
 
         if self.config.conn_mode == 'single':
-            odom_trans.child_frame_id = "base_link"
+            odom_trans.child_frame_id = f"{self.config.prefix}base_link"
         else:
             odom_trans.child_frame_id = f"robot{robot_data.robot_id}/base_link"
 
@@ -80,10 +80,10 @@ class ROS2Publisher(IRobotDataPublisher):
         """Publish Odometry topic"""
         odom_msg = Odometry()
         odom_msg.header.stamp = self.node.get_clock().now().to_msg()
-        odom_msg.header.frame_id = 'odom'
+        odom_msg.header.frame_id = f'{self.config.prefix}odom'
 
         if self.config.conn_mode == 'single':
-            odom_msg.child_frame_id = "base_link"
+            odom_msg.child_frame_id = f"{self.config.prefix}base_link"
         else:
             odom_msg.child_frame_id = f"robot{robot_data.robot_id}/base_link"
 
@@ -197,7 +197,7 @@ class ROS2Publisher(IRobotDataPublisher):
             )
 
             point_cloud = PointCloud2()
-            point_cloud.header = Header(frame_id="odom")
+            point_cloud.header = Header(frame_id=f"{self.config.prefix}odom")
             point_cloud.header.stamp = self.node.get_clock().now().to_msg()
             
             fields = [
@@ -231,8 +231,8 @@ class ROS2Publisher(IRobotDataPublisher):
             camera_info.header.stamp = ros_image.header.stamp
 
             if self.config.conn_mode == 'single':
-                camera_info.header.frame_id = 'front_camera'
-                ros_image.header.frame_id = 'front_camera'
+                camera_info.header.frame_id = f'{self.config.prefix}front_camera'
+                ros_image.header.frame_id = f'{self.config.prefix}front_camera'
             else:
                 camera_info.header.frame_id = f'robot{robot_data.robot_id}/front_camera'
                 ros_image.header.frame_id = f'robot{robot_data.robot_id}/front_camera'
@@ -255,7 +255,7 @@ class ROS2Publisher(IRobotDataPublisher):
 
             voxel_msg = VoxelMapCompressed()
             voxel_msg.stamp = float(lidar.stamp)
-            voxel_msg.frame_id = 'odom'
+            voxel_msg.frame_id = f'{self.config.prefix}odom'
             voxel_msg.resolution = lidar.resolution
             voxel_msg.origin = lidar.origin
             voxel_msg.width = lidar.width or []

@@ -7,7 +7,7 @@ from launch_ros.actions import Node, PushRosNamespace
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import FrontendLaunchDescriptionSource
 from launch.actions import GroupAction, OpaqueFunction
-import xacro
+import xacro, tempfile
 
 def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_sim_time):
     robot_ns = context.perform_substitution(namespace)
@@ -19,6 +19,24 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
     urdf = os.path.join(description_dir, 'urdf', 'unitree_go2_robot.xacro')
     rviz_config = os.path.join(package_dir, 'config', 'single_robot_conf.rviz')
     twist_mux_config = os.path.join(package_dir, 'config', 'twist_mux.yaml')
+
+    ns_prefix = f"{robot_ns}/" if robot_ns else ""
+
+    with open(twist_mux_config) as f:
+        config = f.read()
+    namespaced_config = config.replace("__robot_ns__", ns_prefix)
+    tmp = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml')
+    tmp.write(namespaced_config)
+    tmp.close()
+    namespaced_mux_config = tmp.name
+
+    with open(rviz_config) as f:
+        config = f.read()
+    namespaced_config = config.replace("__tf_prefix__", robot_ns)
+    tmp = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml')
+    tmp.write(namespaced_config)
+    tmp.close()
+    namespaced_rviz_config = tmp.name    
 
     robot_desc = xacro.process(
         urdf,
@@ -33,7 +51,8 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
         namespace=robot_ns,
         parameters=[{
             'use_sim_time': use_sim_time,
-            'robot_description': robot_desc
+            'robot_description': robot_desc,
+            'frame_prefix': ns_prefix
         }],
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )
@@ -51,7 +70,8 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
             parameters=[{
                 'robot_ip': robot_ip,
                 'token': "",
-                'conn_type': "webrtc"
+                'conn_type': "webrtc",
+                'frame_prefix': ns_prefix
             }],
             remappings=[("/tf", "tf"), ("/tf_static", "tf_static")]
         ),
@@ -95,8 +115,9 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
         condition=IfCondition(use_teleop),
         parameters=[
             {'use_sim_time': use_sim_time},
-            twist_mux_config
+            namespaced_mux_config
         ],
+        remappings=[("cmd_vel_out", "/cmd_vel_out")]
     )
 
     rviz_node = Node(
@@ -106,7 +127,7 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
         name='go2_rviz2',
         output='screen',
         namespace=robot_ns,
-        arguments=['-d', rviz_config],
+        arguments=['-d', namespaced_rviz_config],
         parameters=[{'use_sim_time': use_sim_time}],
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )

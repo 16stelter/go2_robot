@@ -1,4 +1,4 @@
-/go2_teleop_node:
+__robot_ns__go2_teleop_node:
   ros__parameters:
     axis_linear:
       x: 1
@@ -15,7 +15,7 @@
     require_enable_button: false
 
 
-/twist_mux:
+__robot_ns__twist_mux:
   ros__parameters:
     use_stamped: False
     topics:

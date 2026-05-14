@@ -51,7 +51,7 @@ class Go2DriverNode(Node):
             node=self,
             config=self.config,
             publishers=self.publishers_dict,
-            broadcaster=self.broadcaster
+            broadcaster=self.broadcaster,
         )
         
         self.robot_data_service = RobotDataService(self.ros2_publisher)
@@ -84,6 +84,7 @@ class Go2DriverNode(Node):
         self.declare_parameters(
             namespace='',
             parameters=[
+                ('frame_prefix', ""),
                 ('robot_ip', robot_ip),
                 ('token', token),
                 ('conn_type', conn_type),
@@ -98,6 +99,7 @@ class Go2DriverNode(Node):
 
         # Get parameter values
         config = RobotConfig.from_params(
+            prefix = self.get_parameter('frame_prefix').get_parameter_value().string_value,
             robot_ip=self.get_parameter('robot_ip').get_parameter_value().string_value,
             token=self.get_parameter('token').get_parameter_value().string_value,
             conn_type=self.get_parameter('conn_type').get_parameter_value().string_value,

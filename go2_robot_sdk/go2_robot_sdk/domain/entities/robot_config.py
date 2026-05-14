@@ -8,6 +8,7 @@ from typing import List
 @dataclass
 class RobotConfig:
     """Robot configuration parameters"""
+    prefix: str
     robot_ip_list: List[str]
     token: str
     conn_type: str
@@ -18,7 +19,7 @@ class RobotConfig:
     conn_mode: str  # 'single' or 'multi'
 
     @classmethod
-    def from_params(cls, robot_ip: str, token: str, conn_type: str, 
+    def from_params(cls, prefix: str, robot_ip: str, token: str, conn_type: str, 
                    enable_video: bool, decode_lidar: bool, 
                    publish_raw_voxel: bool, obstacle_avoidance: bool):
         """Создание конфигурации из параметров"""
@@ -27,6 +28,7 @@ class RobotConfig:
             len(robot_ip_list) == 1 and conn_type != "cyclonedds") else "multi"
         
         return cls(
+            prefix=prefix,
             robot_ip_list=robot_ip_list,
             token=token,
             conn_type=conn_type,
