@@ -201,10 +201,10 @@ class Go2DriverNode(Node):
         
         if self.config.conn_mode == 'single':
             self.create_subscription(
-                Twist, 'cmd_vel_out',
+                Twist, '/cmd_vel_out',
                 lambda msg: self._on_cmd_vel(msg, "0"), qos_profile)
             self.create_subscription(
-                WebRtcReq, 'webrtc_req',
+                WebRtcReq, '/webrtc_req',
                 lambda msg: self._on_webrtc_req(msg, "0"), qos_profile)
         else:
             for i in range(num_robots):

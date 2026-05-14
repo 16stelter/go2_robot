@@ -20,7 +20,7 @@
     use_stamped: False
     topics:
       joy:
-        topic   : cmd_vel_joy
+        topic   : cmd_vel_teleop
         timeout : 0.5
         priority: 10
       navigation:
