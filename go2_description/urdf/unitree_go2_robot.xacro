@@ -6,6 +6,7 @@
     <xacro:arg name="DEBUG" default="false"/>
     <xacro:arg name="robot_controllers" default="$(find go2_description)/config/ros_control/ros_control.yaml"/>
     <xacro:arg name="robot_ns" default=""/>
+    <xacro:arg name="tilted_lidar" default="false"/>
 
     <xacro:include filename="$(find go2_description)/urdf/const.xacro" />
     <xacro:include filename="$(find go2_description)/urdf/materials.xacro" />
@@ -13,8 +14,8 @@
     <!-- <xacro:include filename="$(find go2_description)/stairs.xacro"/> -->
     <xacro:include filename="$(find go2_description)/urdf/unitree_go2_gazebo.xacro" />
     <!-- <xacro:include filename="$(find go2_description)/launch/stairs.urdf.xacro"/> -->
-    <xacro:include filename="$(find go2_description)/urdf/velodyne.xacro"/>
-    <xacro:include filename="$(find go2_description)/urdf/lidar_4D_lidar.xacro"/>
+    <xacro:include filename="$(find go2_description)/urdf/hesai_lidar.xacro"/>
+    <xacro:include filename="$(find go2_description)/urdf/unitree_lidar.xacro"/>
     <xacro:include filename="$(find go2_description)/urdf/realsense_d455.xacro"/>
     <!-- <xacro:stairs stairs="15" xpos="0" ypos="0" zpos="0" /> -->
 
@@ -125,39 +126,6 @@
         <child link="camera_link" />
         <origin rpy="0 0 0" xyz="0.326 0 0.043" />
     </joint>
-
-
-    <!-- <joint name="hesai_lidar_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="hesai_lidar"/>
-        <origin rpy="2.94 0 1.5705" xyz="0.25 -0.038 -0.03"/>
-    </joint>
-
-    <link name="hesai_lidar">
-        <inertial>
-            <mass value="0.5"/>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
-        </inertial>
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <geometry>
-                <mesh filename="file://$(find go2_description)/meshes/L1_4D_Lidar.dae" scale="1 1 1"/>
-            </geometry>
-            <material name="black">
-                <color rgba="0.0 0.0 0.0 1.0"/>
-            </material>
-        </visual>
-        <collision>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <geometry>
-                <mesh filename="file://$(find go2_description)/meshes/L1_4D_Lidar.dae" scale="1 1 1"/>
-            </geometry>
-            <material name="black">
-                <color rgba="0.0 0.0 0.0 1.0"/>
-            </material>
-        </collision>
-    </link> -->
 
     <xacro:leg name="FR" mirror="-1" mirror_dae="False" front_hind="1" front_hind_dae="True" />
     <xacro:leg name="FL" mirror="1" mirror_dae="True" front_hind="1" front_hind_dae="True" />

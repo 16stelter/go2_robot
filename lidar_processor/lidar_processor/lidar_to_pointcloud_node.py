@@ -117,7 +117,7 @@ class LidarToPointCloudNode(Node):
     
     def _declare_parameters(self) -> None:
         """Declare all node parameters"""
-        self.declare_parameter('robot_ip_lst', [])
+        self.declare_parameter('robot_ip_lst', [""])
         self.declare_parameter('map_name', '3d_map')
         self.declare_parameter('map_save', 'true')
         self.declare_parameter('save_interval', 10.0)
@@ -144,17 +144,17 @@ class LidarToPointCloudNode(Node):
     
     def _setup_subscriptions(self) -> None:
         """Setup LiDAR data subscriptions"""
-        self.subscriptions = []
+        self.subs = []
         
         if len(self.config.robot_ip_list) == 1:
             # Single robot mode
             subscription = self.create_subscription(
                 PointCloud2,
-                '/robot0/point_cloud2',
+                '/point_cloud2',
                 self._lidar_callback,
                 self.qos_profile
             )
-            self.subscriptions.append(subscription)
+            self.subs.append(subscription)
         else:
             # Multi-robot mode
             for i, _ in enumerate(self.config.robot_ip_list):
@@ -164,7 +164,7 @@ class LidarToPointCloudNode(Node):
                     self._lidar_callback,
                     self.qos_profile
                 )
-                self.subscriptions.append(subscription)
+                self.subs.append(subscription)
     
     def _setup_publishers(self) -> None:
         """Setup publishers for processed data"""

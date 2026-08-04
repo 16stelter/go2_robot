@@ -1,12 +1,21 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <joint name="velodyne_base_mount_joint" type="fixed">
-        <origin rpy="0 0 0" xyz="0.2 0 0.08"/>
-        <parent link="base_link"/>
-        <child link="velodyne_base_link"/>
-    </joint>
-    <link name="velodyne_base_link">
+    <xacro:if value="$(arg tilted_lidar)">
+        <joint name="hesai_base_mount_joint" type="fixed">
+            <origin rpy="0.0 0.78539815 0.0" xyz="0.2 0 0.22"/>
+            <parent link="base_link"/>
+            <child link="hesai_base_link"/>
+        </joint>
+    </xacro:if>
+    <xacro:unless value="$(arg tilted_lidar)">
+        <joint name="hesai_base_mount_joint" type="fixed">
+            <origin rpy="0 0 0" xyz="0.2 0 0.08"/>
+            <parent link="base_link"/>
+            <child link="hesai_base_link"/>
+        </joint>
+    </xacro:unless>
+    <link name="hesai_base_link">
         <inertial>
             <mass value="0.83"/>
             <origin xyz="0 0 0.03585"/>
@@ -29,12 +38,12 @@
             </geometry>
         </collision>
     </link>
-    <joint name="velodyne_base_scan_joint" type="fixed">
+    <joint name="hesai_base_scan_joint" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 0.0377"/>
-        <parent link="velodyne_base_link"/>
-        <child link="velodyne"/>
+        <parent link="hesai_base_link"/>
+        <child link="hesai_lidar"/>
     </joint>
-    <link name="velodyne">
+    <link name="hesai_lidar">
         <inertial>
             <mass value="0.01"/>
             <origin xyz="0 0 0"/>
@@ -49,11 +58,11 @@
     </link>
     
     <!-- Gazebo Sim Velodyne Sensor plugin -->
-    <gazebo reference="velodyne">
-        <sensor name="velodyne-VLP16" type="gpu_lidar">
-            <topic>velodyne_points</topic>
+    <gazebo reference="hesai_lidar">
+        <sensor name="hesai_lidar" type="gpu_lidar">
+            <topic>hesai_lidar</topic>
             <update_rate>10</update_rate>
-            <gz_frame_id>velodyne</gz_frame_id>
+            <gz_frame_id>hesai_lidar</gz_frame_id>
             <lidar>
                 <scan>
                     <horizontal>
@@ -79,7 +88,7 @@
                     <mean>0.0</mean>
                     <stddev>0.008</stddev>
                 </noise>
-                <frame_id>velodyne</frame_id>
+                <frame_id>hesai_lidar</frame_id>
             </lidar>
             <visualize>true</visualize>
 

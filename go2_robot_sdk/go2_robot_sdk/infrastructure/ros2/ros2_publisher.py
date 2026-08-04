@@ -36,7 +36,7 @@ class ROS2Publisher(IRobotDataPublisher):
 
     def publish_odometry(self, robot_data: RobotData) -> None:
         """Publish odometry data"""
-        if not robot_data.odometry_data:
+        if not self.config.publish_odom or not robot_data.odometry_data:
             return
 
         try:
@@ -197,7 +197,10 @@ class ROS2Publisher(IRobotDataPublisher):
             )
 
             point_cloud = PointCloud2()
-            point_cloud.header = Header(frame_id=f"{self.config.prefix}odom")
+            if(self.config.publish_odom):
+                point_cloud.header = Header(frame_id=f"{self.config.prefix}odom")
+            else:
+                point_cloud.header = Header(frame_id=f"{self.config.prefix}map")
             point_cloud.header.stamp = self.node.get_clock().now().to_msg()
             
             fields = [

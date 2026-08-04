@@ -9,7 +9,7 @@ from launch.launch_description_sources import FrontendLaunchDescriptionSource
 from launch.actions import GroupAction, OpaqueFunction
 import xacro, tempfile
 
-def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_sim_time):
+def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_sim_time, pub_odom):
     robot_ns = context.perform_substitution(namespace)
     robot_ip = context.perform_substitution(ip)
 
@@ -71,39 +71,10 @@ def spawn_nodes(context, namespace, ip, use_rviz, use_foxglove, use_teleop, use_
                 'robot_ip': robot_ip,
                 'token': "",
                 'conn_type': "webrtc",
-                'frame_prefix': ns_prefix
+                'frame_prefix': ns_prefix,
+                'publish_odom': pub_odom,
             }],
             remappings=[("/tf", "tf"), ("/tf_static", "tf_static")]
-        ),
-        # LiDAR processing node
-        Node(
-            package='lidar_processor',
-            executable='lidar_to_pointcloud',
-            name='lidar_to_pointcloud',
-            namespace=robot_ns,
-            parameters=[{
-                'robot_ip_lst': [robot_ip],
-                'map_name': "3d_map",
-                'map_save': "true"
-            }],
-        ),
-        # Advanced point cloud aggregator
-        Node(
-            package='lidar_processor',
-            executable='pointcloud_aggregator',
-            name='pointcloud_aggregator',
-            namespace=robot_ns,
-            parameters=[{
-                'max_range': 20.0,
-                'min_range': 0.1,
-                'height_filter_min': -2.0,
-                'height_filter_max': 3.0,
-                'downsample_rate': 5,
-                'publish_rate': 10.0
-            }],
-            remappings=[("/pointcloud/aggregated", "pointcloud/aggregated"),
-                        ("/pointcloud/filtered", "pointcloud/filtered"),
-                        ("/pointcloud/downsampled", "pointcloud/downsampled")],
         )
     ]
 
@@ -191,12 +162,19 @@ def generate_launch_description():
         description="Whether to use sim time"
     )
 
+    pub_odom_arg = DeclareLaunchArgument(
+        "publish_odom",
+        default_value="true",
+        description="Whether to publish the robots odometry (disable this when using lego-loam)."
+    )
+
     robot_ns = LaunchConfiguration("robot_ns")
     robot_ip = LaunchConfiguration("robot_ip")
     use_rviz = LaunchConfiguration("use_rviz")
     use_foxglove = LaunchConfiguration("use_foxglove")
     use_teleop = LaunchConfiguration("use_teleop")
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    pub_odom = LaunchConfiguration("publish_odom", default='true')
 
     return LaunchDescription([
         robot_ns_arg,
@@ -205,5 +183,6 @@ def generate_launch_description():
         use_foxglove_arg,
         use_teleop_arg,
         use_sim_time_arg,
-        OpaqueFunction(function=spawn_nodes, args=[robot_ns, robot_ip, use_rviz, use_foxglove, use_teleop, use_sim_time])
+        pub_odom_arg,
+        OpaqueFunction(function=spawn_nodes, args=[robot_ns, robot_ip, use_rviz, use_foxglove, use_teleop, use_sim_time, pub_odom])
     ])

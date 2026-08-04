@@ -92,6 +92,7 @@ class Go2DriverNode(Node):
                 ('decode_lidar', True),
                 ('publish_raw_voxel', False),
                 ('obstacle_avoidance', False),
+                ('publish_odom', True)
             ]
         )
 
@@ -106,17 +107,20 @@ class Go2DriverNode(Node):
             enable_video=self.get_parameter('enable_video').get_parameter_value().bool_value,
             decode_lidar=self.get_parameter('decode_lidar').get_parameter_value().bool_value,
             publish_raw_voxel=self.get_parameter('publish_raw_voxel').get_parameter_value().bool_value,
-            obstacle_avoidance=self.get_parameter('obstacle_avoidance').get_parameter_value().bool_value
+            obstacle_avoidance=self.get_parameter('obstacle_avoidance').get_parameter_value().bool_value,
+            publish_odom=self.get_parameter('publish_odom').get_parameter_value().bool_value,
         )
 
         # Log configuration
         self.get_logger().info(f"Robot IPs: {config.robot_ip_list}")
+        self.get_logger().info(f"Frame prefix: {config.prefix}")
         self.get_logger().info(f"Connection type: {config.conn_type}")
         self.get_logger().info(f"Connection mode: {config.conn_mode}")
         self.get_logger().info(f"Enable video: {config.enable_video}")
         self.get_logger().info(f"Decode lidar: {config.decode_lidar}")
         self.get_logger().info(f"Publish raw voxel: {config.publish_raw_voxel}")
         self.get_logger().info(f"Obstacle avoidance: {config.obstacle_avoidance}")
+        self.get_logger().info(f"Publish odom: {config.publish_odom}")
 
         return config
 
@@ -147,7 +151,7 @@ class Go2DriverNode(Node):
             if self.config.conn_mode == 'single':
                 joint_topic = 'joint_states'
                 robot_state_topic = 'go2_states'
-                lidar_topic = 'point_cloud2'
+                lidar_topic = 'unitree_lidar/points'
                 odom_topic = 'odom'
                 imu_topic = 'imu'
                 camera_topic = 'camera/image_raw'
@@ -157,7 +161,7 @@ class Go2DriverNode(Node):
                 prefix = f'robot{i}'
                 joint_topic = f'{prefix}/joint_states'
                 robot_state_topic = f'{prefix}/go2_states'
-                lidar_topic = f'{prefix}/point_cloud2'
+                lidar_topic = f'{prefix}/unitree_lidar/points'
                 odom_topic = f'{prefix}/odom'
                 imu_topic = f'{prefix}/imu'
                 camera_topic = f'{prefix}/camera/image_raw'
