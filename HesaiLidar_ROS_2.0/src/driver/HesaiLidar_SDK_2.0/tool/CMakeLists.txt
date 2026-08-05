@@ -132,12 +132,12 @@ target_link_libraries(ptc_tool
 # No support cuda and pcl compile, the error case will occur
 # error: unterminated argument list invoking macro "VTK_AUTOINIT1" 
 # find_package(CUDA )
-if(${CUDA_FOUND})
+if(False)#${CUDA_FOUND})
 	set(CUDA_SOURCE_PROPERTY_FORMAT OBJ)
 	set(CUDA_SEPARABLE_COMPILATION ON)
 	include_directories(${CUDA_INCLUDE_DIRS})
 	set(CUDA_PROPAGATE_HOST_FLAGS OFF)
-	set(CUDA_NVCC_FLAGS -arch=sm_61;-O3;-G;-g;-std=c++14)#根据具体GPU性能更改算力参数
+	set(CUDA_NVCC_FLAGS -arch=sm_87;-O3;-G;-g;-std=c++14)#根据具体GPU性能更改算力参数
 	link_directories($ENV{CUDA_PATH}/lib/x64)
   file(GLOB_RECURSE CURRENT_HEADERS  ../*.h ../*.hpp ../*.cuh)
   file(GLOB CURRENT_SOURCES  ../*.cpp ../*.cu)
@@ -157,7 +157,7 @@ if(${CUDA_FOUND})
   ${OPENSSL_LIBRARIES}
   ${PCL_LIBRARIES} 
 )
-else(${CUDA_FOUND})
+else()#${CUDA_FOUND})
 	MESSAGE(STATUS "cuda not found!")
-endif(${CUDA_FOUND})
+endif()#${CUDA_FOUND})
 

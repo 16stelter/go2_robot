@@ -166,7 +166,7 @@ set(LIB_TARGETS source_lib
     log_lib
     platutils_lib)
 
-if(false) #CUDA_FOUND)
+if(False) #CUDA_FOUND)
 
   message(=============================================================)
   message("-- CUDA Found. CUDA Support is turned On.")
@@ -191,7 +191,7 @@ if(false) #CUDA_FOUND)
                 ${CUDA_LIBS}
                 # libhesai
     )
-else(true) #CUDA_FOUND)
+else()#CUDA_FOUND)
 
   message(=============================================================)
   message("-- CUDA Not Found. CUDA Support is turned Off.")
