@@ -3,7 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:if value="$(arg tilted_lidar)">
         <joint name="hesai_base_mount_joint" type="fixed">
-            <origin rpy="0.0 0.78539815 0.0" xyz="0.2 0 0.22"/>
+            <origin rpy="0.0 0.6 0.0" xyz="0.3 0 0.1"/>
             <parent link="base_link"/>
             <child link="hesai_base_link"/>
         </joint>
@@ -74,8 +74,8 @@
                     <vertical>
                         <samples>16</samples>
                         <resolution>1</resolution>
-                        <min_angle>-0.261799</min_angle>
-                        <max_angle>0.261799</max_angle>
+                        <min_angle>-0.3490659</min_angle>
+                        <max_angle>0.3490659</max_angle>
                     </vertical>
                 </scan>
                 <range>
