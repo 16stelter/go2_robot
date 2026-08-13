@@ -21,7 +21,10 @@ def generate_launch_description():
         package='go2_lowlevel',
         executable='lowlevel',
         name='go2_lowlevel_node',
-        output='screen'
+        output='screen',
+        additional_env={
+            "LD_PRELOAD": "/home/unitree/pixiws/.pixi/envs/default/lib/libgomp.so.1"
+        },
     )
 
     return LaunchDescription([
