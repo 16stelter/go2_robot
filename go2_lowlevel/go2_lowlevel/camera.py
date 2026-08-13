@@ -12,6 +12,7 @@ class Go2Video(Node):
     def __init__(self):
         super().__init__("go2_video")
 
+        # it is critical that qos_profile_sensor_data is used. The backpressure otherwise causes the robot to move its limbs randomly!
         self.camera_sub = self.create_subscription(Go2FrontVideoData, 'frontvideostream', self.camera_cb, qos_profile_sensor_data)
         self.image_pub = self.create_publisher(Image, 'camera/image_raw', qos_profile_sensor_data)
 
@@ -28,13 +29,19 @@ class Go2Video(Node):
         )
         self.decoder_thread.start()
 
+    '''
+    We're using a queue system here to decouple the expensive decoding of the h.264 stream from the ROS callback.
+    The frontvideostream topic actually contains two interleaved video streams at 360 or 720 resolution, you need to
+    filter out either of them to get usable images. Within each of the streams, one message with NAL types 5, 7 and 8 is
+    sent, followed by several messages of NAL type 1.
+    '''
     def camera_cb(self, msg):
         if msg.resolution != 360:
             return
         data = bytes(msg.data)
         nal_type = data[4] & 0x1F
         with self.queue_condition:
-            if nal_type != 1: # messages are always either nal 1 or nal [5, 7, 8]. if it is not 1, we can safely reset/resync
+            if nal_type != 1:
                 self.queue.clear()
             if len(self.queue) < self.queue_size:
                 self.queue.append(data)
