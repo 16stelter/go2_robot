@@ -22,13 +22,22 @@ def generate_launch_description():
         executable='lowlevel',
         name='go2_lowlevel_node',
         output='screen',
+    )
+    
+    camera = Node(
+        package='go2_lowlevel',
+        executable='camera',
+        name='go2_camera_node',
+        output='screen',
         additional_env={
             "LD_PRELOAD": "/home/unitree/pixiws/.pixi/envs/default/lib/libgomp.so.1"
         },
+
     )
 
     return LaunchDescription([
         robot_state_publisher,
-        lowlevel
+        lowlevel,
+        camera
     ])
 

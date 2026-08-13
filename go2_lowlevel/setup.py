@@ -28,6 +28,7 @@ setup(
     entry_points={
         'console_scripts': [
             'lowlevel = go2_lowlevel.lowlevel:main',
+            'camera = go2_lowlevel.camera:main',
         ],
     },
 )
