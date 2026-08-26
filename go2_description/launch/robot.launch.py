@@ -69,10 +69,18 @@ def generate_launch_description():
             description='Use simulation/Gazebo clock if true',
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'tilted_lidar',
+            default_value='false',
+            description='Whether the lidar is tilted forward'
+        )
+    )
 
     description_file = LaunchConfiguration('description_file')
     prefix = LaunchConfiguration('prefix')
     use_sim_time = LaunchConfiguration('use_sim_time')
+    tilted_lidar = LaunchConfiguration('tilted_lidar')
 
     robot_description_content = Command(
         [
@@ -80,7 +88,9 @@ def generate_launch_description():
             ' ',
             PathJoinSubstitution([FindPackageShare('go2_description'), 'urdf', description_file]),
             ' ',
-            'prefix:=', prefix
+            'prefix:=', prefix,
+            ' ',
+            'tilted_lidar:=', tilted_lidar,
         ]
     )
 
