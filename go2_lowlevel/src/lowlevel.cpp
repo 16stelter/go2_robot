@@ -9,7 +9,7 @@ Lowlevel::Lowlevel(rclcpp::Node::SharedPtr node, const std::string &ns, std::vec
     qos_.durability_volatile();
     
     lowstate_sub_ = node_->create_subscription<unitree_go::msg::LowState>(ns + "/lowstate", qos_, std::bind(&Lowlevel::lowstate_callback, this, std::placeholders::_1));
-    odom_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(ns + "/utlidar/odom", qos_, std::bind(&Lowlevel::odom_callback, this, std::placeholders::_1));
+    odom_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(ns + "/utlidar/robot_odom", qos_, std::bind(&Lowlevel::odom_callback, this, std::placeholders::_1));
     joint_state_pub_ = node_->create_publisher<sensor_msgs::msg::JointState>(ns + "/joint_states", qos_);
     tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(node_);
 }
