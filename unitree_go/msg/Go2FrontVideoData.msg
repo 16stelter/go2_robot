@@ -6,3 +6,4 @@ int16 resolution
 
 # Data as a sequence of bytes (octets)
 uint8[] data
+
