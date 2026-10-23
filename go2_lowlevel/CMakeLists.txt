@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(unitree_go REQUIRED)
+find_package(unitree_api REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
@@ -27,6 +28,7 @@ include_directories(include)
 
 add_executable(lowlevel src/lowlevel.cpp)
 add_executable(camera src/camera.cpp)
+add_executable(control src/control.cpp)
 
 ament_target_dependencies(
   lowlevel
@@ -46,6 +48,13 @@ ament_target_dependencies(
   sensor_msgs
 )
 
+ament_targeT_dependencies(
+  control
+  rclcpp
+  unitree_api
+  geometry_msgs
+)
+
 target_link_libraries(camera
   PkgConfig::FFMPEG
   yaml-cpp::yaml-cpp
@@ -54,6 +63,7 @@ target_link_libraries(camera
 install(TARGETS
   lowlevel
   camera
+  control
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -42,11 +42,17 @@ def generate_launch_description():
         name = 'camera',
         output = 'screen',
         parameters=[
-        {
-            'camera_calibration_file': LaunchConfiguration('camera_calibration_file')
-        }
-    ]
-        
+            {
+                'camera_calibration_file': LaunchConfiguration('camera_calibration_file')
+            }
+        ]
+    )
+
+    control = Node(
+        package = 'go2_lowlevel',
+        executable = 'control',
+        name = 'control',
+        output = 'screen',
     )
 
     return LaunchDescription([
@@ -54,4 +60,5 @@ def generate_launch_description():
         robot_state_publisher,
         lowlevel,
         camera,
+        control,
     ])
